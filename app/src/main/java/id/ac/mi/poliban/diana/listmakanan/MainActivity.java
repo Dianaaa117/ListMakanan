@@ -1,0 +1,47 @@
+package id.ac.mi.poliban.diana.listmakanan;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import id.ac.mi.poliban.diana.listmakanan.Makanan;
+import id.ac.mi.poliban.diana.listmakanan.R;
+
+public class MainActivity extends AppCompatActivity {
+    private List<Makanan> makanans = new  ArrayList<>();
+    private ListView lvMakanan;
+    private BaseAdapter adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //koneksikan object dengan view
+        lvMakanan = findViewById(R.id.listview);
+
+        //ambil data dari MakananData dan berikan ke object Makanans
+        makanans.addAll(DataMakanan.getAllMakanans());
+
+        //buat object adapter dan kirim data makanans sebagai
+        //parameter di konstruktor MakananAdapter()
+        adapter = new MakananAdapter(makanans);
+        //pasang object adapter sebagai adapter lvMakanan
+        lvMakanan.setAdapter(adapter);
+
+        //menambahkan kejadian ketika user mengklik salah satu item
+        lvMakanan.setOnItemClickListener((parent, view, position, id) -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Makanan Yang Anda Pilih")
+                    .setMessage("Anda memilih: " +
+                            makanans.get(position).getMakananName())
+                    .setPositiveButton("OK", null).show();
+        });
+    }
+}
